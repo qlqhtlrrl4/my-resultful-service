@@ -8,3 +8,17 @@ logging:
 spring:
   messages:
     basename: messages
+#  security:
+#    user:
+#      name: username
+#      password: passw0rd
+# swagger2
+#  mvc:
+#    pathmatch:
+#      matching-strategy: ant_path_matcher
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

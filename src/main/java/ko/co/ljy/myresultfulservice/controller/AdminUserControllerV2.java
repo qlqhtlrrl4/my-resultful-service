@@ -29,28 +29,7 @@ public class AdminUserControllerV2 {
 
     //admin/users/{id}
 
-    @GetMapping("/v2/users/{id}")
-    public MappingJacksonValue retrieve4AdminV2(@PathVariable("id") int id) {
-        Optional<User> user = service.findOne(id);
 
-        AdminUserV2 adminUser = new AdminUserV2();
-
-        if(user.isEmpty()) {
-            throw new UserNotFoundException(String.format("ID[%s] not found", id));
-        } else {
-            BeanUtils.copyProperties(user.get(), adminUser);
-            adminUser.setGrade("ADMIN");
-        }
-
-        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id","name","joinDate","grade");
-
-        FilterProvider filters = new SimpleFilterProvider().addFilter("UserInfoV2",filter);
-
-        MappingJacksonValue mapping = new MappingJacksonValue(adminUser);
-        mapping.setFilters(filters);
-
-        return mapping;
-    }
 
     @GetMapping("/v2/users")
     public MappingJacksonValue retrieveAll4AdminV2() {
@@ -74,8 +53,8 @@ public class AdminUserControllerV2 {
         return mapping;
     }
 
-    @GetMapping(value = "/users/{id}", params = "version=1")
-    public MappingJacksonValue retrieve4AdminV3(@PathVariable("id") int id) {
+    @GetMapping(value = "/v2/users/{id}", params = "version=1")
+    public MappingJacksonValue retrieve4AdminV2(@PathVariable("id") int id) {
         Optional<User> user = service.findOne(id);
 
         AdminUser adminUser = new AdminUser();
@@ -95,72 +74,4 @@ public class AdminUserControllerV2 {
 
         return mapping;
     }
-
-    @GetMapping(value = "/users", params = "version=1")
-    public MappingJacksonValue retrieveAll4AdminV3() {
-
-        List<User> users = service.findAll();
-        List<AdminUser> adminUsers = new ArrayList<>();
-        AdminUser adminUser = null;
-
-        for (User user : users) {
-            adminUser = new AdminUser();
-            BeanUtils.copyProperties(user, adminUser);
-            adminUsers.add(adminUser);
-        }
-
-        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id","name","joinDate","ssn");
-        FilterProvider filters = new SimpleFilterProvider().addFilter("UserInfo",filter);
-        MappingJacksonValue mapping = new MappingJacksonValue(adminUsers);
-        mapping.setFilters(filters);
-
-        return mapping;
-    }
-
-
-    @GetMapping(value = "/users/{id}", params = "version=2")
-    public MappingJacksonValue retrieve4AdminV4(@PathVariable("id") int id) {
-        Optional<User> user = service.findOne(id);
-
-        AdminUserV2 adminUser = new AdminUserV2();
-
-        if(user.isEmpty()) {
-            throw new UserNotFoundException(String.format("ID[%s] not found", id));
-        } else {
-            BeanUtils.copyProperties(user.get(), adminUser);
-            adminUser.setGrade("ADMIN");
-        }
-
-        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id","name","joinDate","grade");
-
-        FilterProvider filters = new SimpleFilterProvider().addFilter("UserInfoV2",filter);
-
-        MappingJacksonValue mapping = new MappingJacksonValue(adminUser);
-        mapping.setFilters(filters);
-
-        return mapping;
-    }
-
-    @GetMapping(value = "/users", params = "version=2")
-    public MappingJacksonValue retrieveAll4AdminV4() {
-
-        List<User> users = service.findAll();
-        List<AdminUserV2> adminUsers = new ArrayList<>();
-        AdminUserV2 adminUser = null;
-
-        for (User user : users) {
-            adminUser = new AdminUserV2();
-            BeanUtils.copyProperties(user, adminUser);
-            adminUser.setGrade("ADMIN");
-            adminUsers.add(adminUser);
-        }
-
-        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id","name","joinDate","grade");
-        FilterProvider filters = new SimpleFilterProvider().addFilter("UserInfoV2",filter);
-        MappingJacksonValue mapping = new MappingJacksonValue(adminUsers);
-        mapping.setFilters(filters);
-
-        return mapping;
-    }
-
 }

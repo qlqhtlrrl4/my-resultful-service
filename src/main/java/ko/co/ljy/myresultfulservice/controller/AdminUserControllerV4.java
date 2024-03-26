@@ -22,13 +22,13 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin")
+@RequestMapping("/admin/v4")
 public class AdminUserControllerV4 {
 
     private final UserDaoService service;
 
-    @GetMapping(value = "/users/{id}", headers = "X-API-VERSION=1")
-    public MappingJacksonValue retrieve4AdminV3(@PathVariable("id") int id) {
+    @GetMapping(value = "/users/{id}", produces = "application/vnd.company.appv1+json")
+    public MappingJacksonValue retrieve4AdminV4(@PathVariable("id") int id) {
         Optional<User> user = service.findOne(id);
 
         AdminUser adminUser = new AdminUser();
@@ -49,8 +49,8 @@ public class AdminUserControllerV4 {
         return mapping;
     }
 
-    @GetMapping(value = "/users", headers = "X-API-VERSION=1")
-    public MappingJacksonValue retrieveAll4AdminV3() {
+    @GetMapping(value = "/users", produces = "application/vnd.company.appv1+json")
+    public MappingJacksonValue retrieveAll4AdminV4() {
 
         List<User> users = service.findAll();
         List<AdminUser> adminUsers = new ArrayList<>();
@@ -71,8 +71,8 @@ public class AdminUserControllerV4 {
     }
 
 
-    @GetMapping(value = "/users/{id}", headers = "X-API-VERSION=2")
-    public MappingJacksonValue retrieve4AdminV4(@PathVariable("id") int id) {
+    @GetMapping(value = "/users/{id}", produces = "application/vnd.company.appv2+json")
+    public MappingJacksonValue retrieve4AdminV5(@PathVariable("id") int id) {
         Optional<User> user = service.findOne(id);
 
         AdminUserV2 adminUser = new AdminUserV2();
@@ -94,8 +94,8 @@ public class AdminUserControllerV4 {
         return mapping;
     }
 
-    @GetMapping(value = "/users", headers = "X-API-VERSION=2")
-    public MappingJacksonValue retrieveAll4AdminV4() {
+    @GetMapping(value = "/users", produces = "application/vnd.company.appv2+json")
+    public MappingJacksonValue retrieveAll4AdminV5() {
 
         List<User> users = service.findAll();
         List<AdminUserV2> adminUsers = new ArrayList<>();

@@ -27,9 +27,7 @@ public class AdminUserControllerV3 {
 
     private final UserDaoService service;
 
-    //admin/users/{id}
-
-    @GetMapping(value = "/users/{id}", params = "version=1")
+    @GetMapping(value = "/v3/users/{id}", headers = "X-API-VERSION=1")
     public MappingJacksonValue retrieve4AdminV3(@PathVariable("id") int id) {
         Optional<User> user = service.findOne(id);
 
@@ -51,7 +49,7 @@ public class AdminUserControllerV3 {
         return mapping;
     }
 
-    @GetMapping(value = "/users", params = "version=1")
+    @GetMapping(value = "/v3/users", headers = "X-API-VERSION=1")
     public MappingJacksonValue retrieveAll4AdminV3() {
 
         List<User> users = service.findAll();
@@ -73,8 +71,8 @@ public class AdminUserControllerV3 {
     }
 
 
-    @GetMapping(value = "/users/{id}", params = "version=2")
-    public MappingJacksonValue retrieve4AdminV4(@PathVariable("id") int id) {
+    @GetMapping(value = "/v3/users/{id}", headers = "X-API-VERSION=2")
+    public MappingJacksonValue retrieve4AdminV3_1(@PathVariable("id") int id) {
         Optional<User> user = service.findOne(id);
 
         AdminUserV2 adminUser = new AdminUserV2();
@@ -82,16 +80,10 @@ public class AdminUserControllerV3 {
         if(user.isEmpty()) {
             throw new UserNotFoundException(String.format("ID[%s] not found", id));
         } else {
-            //BeanUtils.copyProperties : 스프링에서 기본으로 제공해주는 method 객체를 쉽고 간결하게 복사할 수 있다.
-            //copyProperties(Object source, Object target, String...ignoreProperties)
-            // source : 원본 객체 | target : 복사 객체 | ignoreProperties : 복사하지 않을 필드명
             BeanUtils.copyProperties(user.get(), adminUser);
             adminUser.setGrade("ADMIN");
         }
-        //SimpleBeanPropertyFilter 는 serializeAllExcept() / filterOutAllExcept 를 통해서 필드를 필터링 할 수 있음
-        // serializeAllExcept() : 지정한 데이터 제회한 모든 데이터가 직렬화되어 보여짐
-        // filterOutAllExcept() : 지정한 데이터만 직렬화 되어 보여짐
-        // serializeAll() : 모든 속성이 직렬화
+
         SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id","name","joinDate","grade");
 
         FilterProvider filters = new SimpleFilterProvider().addFilter("UserInfoV2",filter);
@@ -102,8 +94,8 @@ public class AdminUserControllerV3 {
         return mapping;
     }
 
-    @GetMapping(value = "/users", params = "version=2")
-    public MappingJacksonValue retrieveAll4AdminV4() {
+    @GetMapping(value = "/users", headers = "X-API-VERSION=2")
+    public MappingJacksonValue retrieveAll4AdminV3_1() {
 
         List<User> users = service.findAll();
         List<AdminUserV2> adminUsers = new ArrayList<>();
