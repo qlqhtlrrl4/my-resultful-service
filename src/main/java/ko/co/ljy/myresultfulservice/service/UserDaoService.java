@@ -3,6 +3,7 @@ package ko.co.ljy.myresultfulservice.service;
 import ko.co.ljy.myresultfulservice.domain.User;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Component
@@ -22,7 +23,7 @@ public class UserDaoService {
         }
 
         if(user.getJoinDate() == null) {
-            user.setJoinDate(new Date());
+            user.setJoinDate(LocalDateTime.now());
         }
         users.add(user);
 
